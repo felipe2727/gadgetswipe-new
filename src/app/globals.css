@@ -1,26 +1,115 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Stitch primary palette */
+  --primary: #0df269;
+  --primary-content: #003816;
+
+  /* Backgrounds */
+  --bg-primary: #0a0a0f;
+  --bg-card: #15151a;
+  --bg-elevated: #1e1e25;
+  --surface-dark: #15151a;
+
+  /* Borders */
+  --border: rgba(255, 255, 255, 0.08);
+
+  /* Text */
+  --text-primary: #f0f0f5;
+  --text-secondary: #8888a0;
+
+  /* Semantic colors */
+  --accent: #0df269;
+  --accent-glow: rgba(13, 242, 105, 0.3);
+  --success: #0df269;
+  --danger: #ff4757;
+  --super: #ffa502;
+
+  /* Stitch-specific */
+  --accent-red: #ff4757;
+  --accent-gold: #ffa502;
+
+  /* Shadows */
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --shadow-neon: 0 0 10px rgba(13, 242, 105, 0.5), 0 0 20px rgba(13, 242, 105, 0.3);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-card: var(--bg-card);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-border: var(--border);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-accent: var(--accent);
+  --color-accent-glow: var(--accent-glow);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --color-super: var(--super);
+  --color-primary: var(--primary);
+  --color-primary-content: var(--primary-content);
+  --color-surface-dark: var(--surface-dark);
+  --color-accent-red: var(--accent-red);
+  --color-accent-gold: var(--accent-gold);
+  --font-sans: var(--font-space-grotesk);
+  --font-mono: var(--font-space-grotesk);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Glassmorphism panel */
+.glass-panel {
+  background: rgba(21, 21, 26, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Card stack behind effect */
+.card-stack-behind {
+  transform: scale(0.95) translateY(12px);
+  opacity: 0.6;
+  filter: brightness(0.7);
+}
+
+/* Selection */
+::selection {
+  background: #0df269;
+  color: #003816;
 }
