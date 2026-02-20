@@ -79,7 +79,7 @@ export function ResultsClient({
             Top 3 Matches
           </h1>
           <p className="text-slate-400 text-sm">
-            Based on your last 20 swipes, these gadgets fit your vibe.
+            Based on your last 25 swipes, these gadgets fit your vibe.
           </p>
         </div>
       </header>

@@ -54,7 +54,7 @@ export const useSwipeStore = create<SwipeState>((set, get) => ({
     ];
     const newIndex = state.currentIndex + 1;
     const totalCards = state.gadgets.length;
-    const isComplete = newIndex >= Math.min(20, totalCards);
+    const isComplete = newIndex >= Math.min(25, totalCards);
 
     set({
       swipeHistory: newHistory,

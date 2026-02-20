@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import type { Gadget, ScoredGadget } from "@/types";
 import { formatPrice, cn } from "@/lib/utils";
 
@@ -13,7 +12,7 @@ interface ResultCardProps {
   onDealClick: (gadgetId: string) => void;
 }
 
-const MAX_SCORE = 4.3;
+const MAX_SCORE = 4.8;
 
 export function ResultCard({
   gadget,
@@ -64,18 +63,34 @@ export function ResultCard({
         )}
       >
         {imgError ? (
-          <div className="absolute inset-0 flex items-center justify-center bg-surface-dark">
-            <span className="text-slate-500 text-xs">No image</span>
+          <div
+            className="absolute inset-0 flex flex-col items-center justify-center p-3 text-center"
+            style={{
+              background:
+                "linear-gradient(135deg, var(--color-primary, #00e87b) 0%, #0A0A0F 70%)",
+            }}
+          >
+            <span className="material-symbols-outlined text-white/20 text-3xl mb-1">
+              devices
+            </span>
+            <span className="text-white/50 text-xs font-medium line-clamp-2 leading-tight">
+              {gadget.title}
+            </span>
           </div>
         ) : (
           <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-110">
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src={gadget.image_url}
               alt={gadget.title}
-              fill
-              className="object-cover"
-              sizes={isTopPick ? "128px" : "112px"}
+              className="absolute inset-0 w-full h-full object-cover"
               onError={() => setImgError(true)}
+              onLoad={(e) => {
+                const img = e.currentTarget;
+                if (img.naturalWidth < 200 || img.naturalHeight < 200) {
+                  setImgError(true);
+                }
+              }}
             />
           </div>
         )}

@@ -34,7 +34,7 @@ export function SwipeClient({ initialGadgets }: SwipeClientProps) {
         const res = await fetch("/api/sessions", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ total_cards: 20 }),
+          body: JSON.stringify({ total_cards: 25 }),
         });
         const session = await res.json();
         setSession(session.id, initialGadgets);
@@ -124,7 +124,7 @@ export function SwipeClient({ initialGadgets }: SwipeClientProps) {
     );
   }
 
-  const totalCards = Math.min(20, gadgets.length);
+  const totalCards = Math.min(25, gadgets.length);
 
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-bg-primary relative">

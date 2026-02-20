@@ -86,7 +86,7 @@ CREATE TABLE swipes (
   direction TEXT NOT NULL CHECK (direction IN ('right', 'left', 'super')),
   swipe_duration_ms INTEGER,
   created_at TIMESTAMPTZ DEFAULT now(),
-  UNIQUE(user_id, gadget_id)
+  UNIQUE(session_id, user_id, gadget_id)
 );
 
 CREATE INDEX idx_swipes_user ON swipes(user_id);

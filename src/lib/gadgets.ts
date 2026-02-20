@@ -7,13 +7,22 @@ export async function getGadgetsForSession(
 ): Promise<Gadget[]> {
   const supabase = await createClient();
 
-  // Fetch active, approved gadgets (randomized by limiting to a window)
-  const { data } = await supabase
-    .from("gadgets")
-    .select("*")
-    .eq("is_active", true)
-    .eq("content_status", "approved")
-    .limit(limit);
+  // Fetch active, approved gadgets the user hasn't seen, in random order
+  const { data, error } = await supabase.rpc("get_fresh_gadgets", {
+    p_user_id: userId,
+    p_limit: limit,
+  });
+
+  if (error) {
+    // Fallback to basic query if RPC doesn't exist yet
+    const { data: fallback } = await supabase
+      .from("gadgets")
+      .select("*")
+      .eq("is_active", true)
+      .eq("content_status", "approved")
+      .limit(limit);
+    return (fallback ?? []).map(mapGadgetRow);
+  }
 
   return (data ?? []).map(mapGadgetRow);
 }

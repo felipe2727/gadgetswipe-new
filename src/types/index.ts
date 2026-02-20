@@ -5,7 +5,14 @@ export type SourceSite =
   | "gadgetflow"
   | "amazon"
   | "producthunt"
-  | "uncrate";
+  | "uncrate"
+  | "blessthisstuff"
+  | "awesomestuff"
+  | "dudeiwantthat"
+  | "coolthings"
+  | "gearpatrol"
+  | "yankodesign"
+  | "rakunew";
 
 export interface Gadget {
   id: string;

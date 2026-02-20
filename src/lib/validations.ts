@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const createSessionSchema = z.object({
-  total_cards: z.number().int().min(1).max(50).optional().default(20),
+  total_cards: z.number().int().min(1).max(50).optional().default(25),
 });
 
 export const recordSwipeSchema = z.object({

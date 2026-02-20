@@ -40,7 +40,7 @@ export function scoreSession(
 
     // 1. Direction weight
     if (swipe.direction === "super") {
-      score += 2.5;
+      score += 3.0;
       reasons.push("Super liked");
     } else {
       score += 1.0;
@@ -51,7 +51,7 @@ export function scoreSession(
     if (swipe.swipe_duration_ms && medianDuration > 0) {
       const timeBonus = Math.min(
         1,
-        swipe.swipe_duration_ms / (2 * medianDuration)
+        swipe.swipe_duration_ms / (1.5 * medianDuration)
       );
       score += timeBonus;
       if (timeBonus > 0.7) reasons.push("Spent extra time viewing");

@@ -112,7 +112,7 @@ export const swipes = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   },
   (table) => [
-    unique("swipes_user_gadget_unique").on(table.userId, table.gadgetId),
+    unique("swipes_session_gadget_unique").on(table.sessionId, table.userId, table.gadgetId),
     index("idx_swipes_user").on(table.userId),
     index("idx_swipes_session").on(table.sessionId),
     index("idx_swipes_gadget").on(table.gadgetId),

@@ -8,7 +8,6 @@ import {
   useAnimation,
   type PanInfo,
 } from "framer-motion";
-import Image from "next/image";
 import type { Gadget, SwipeDirection } from "@/types";
 import { formatPrice, cn } from "@/lib/utils";
 import { SwipeOverlay } from "./SwipeOverlay";
@@ -22,6 +21,13 @@ const SOURCE_DISPLAY: Record<string, string> = {
   gadgetflow: "GadgetFlow",
   producthunt: "Product Hunt",
   uncrate: "Uncrate",
+  blessthisstuff: "BlessThisStuff",
+  awesomestuff: "AwesomeStuff",
+  dudeiwantthat: "DudeIWantThat",
+  coolthings: "CoolThings",
+  gearpatrol: "Gear Patrol",
+  yankodesign: "Yanko Design",
+  rakunew: "Rakunew",
 };
 
 interface SwipeCardProps {
@@ -172,25 +178,32 @@ export function SwipeCard({
         <div className="relative h-[65%] w-full overflow-hidden">
           {imgError ? (
             <div
-              className="w-full h-full flex items-end p-4"
+              className="w-full h-full flex flex-col items-center justify-center p-6 text-center"
               style={{
                 background:
-                  "linear-gradient(135deg, #15151a 0%, #0A0A0F 100%)",
+                  "linear-gradient(135deg, var(--color-primary, #00e87b) 0%, #0A0A0F 70%)",
               }}
             >
-              <span className="text-white/40 text-sm font-medium line-clamp-2">
+              <span className="material-symbols-outlined text-white/20 text-6xl mb-3">
+                devices
+              </span>
+              <span className="text-white/60 text-base font-semibold line-clamp-2 leading-tight">
                 {gadget.title}
               </span>
             </div>
           ) : (
-            <Image
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
               src={gadget.image_url}
               alt={gadget.title}
-              fill
-              className="object-cover"
-              sizes="360px"
-              priority={stackIndex === 0}
+              className="absolute inset-0 w-full h-full object-cover"
               onError={() => setImgError(true)}
+              onLoad={(e) => {
+                const img = e.currentTarget;
+                if (img.naturalWidth < 200 || img.naturalHeight < 200) {
+                  setImgError(true);
+                }
+              }}
               draggable={false}
             />
           )}
