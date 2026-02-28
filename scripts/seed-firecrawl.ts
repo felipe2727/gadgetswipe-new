@@ -1,6 +1,6 @@
 /**
- * Seed script: scrapes gadget sources using Firecrawl (markdown mode)
- * and parses product listings from the rendered page content.
+ * Seed script: scrapes electronics-focused sources using Firecrawl (markdown mode)
+ * and inserts curated gadgets into the database as "pending" for admin review.
  *
  * Usage:
  *   npx tsx scripts/seed-firecrawl.ts
@@ -36,7 +36,7 @@ const firecrawl = new FirecrawlApp({ apiKey: FIRECRAWL_API_KEY });
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ---------------------------------------------------------------------------
-// Source definitions
+// Source definitions — electronics-specific category pages
 // ---------------------------------------------------------------------------
 
 interface SourceConfig {
@@ -47,67 +47,110 @@ interface SourceConfig {
 }
 
 const SOURCES: SourceConfig[] = [
+  // Amazon Best Sellers — each page is a specific electronics category
   {
-    url: "https://uncrate.com/gear/",
-    source_site: "uncrate",
-    category_slug: "edc",
-    label: "Uncrate Gear",
+    url: "https://www.amazon.com/Best-Sellers-Electronics-Headphones/zgbs/electronics/172541",
+    source_site: "amazon",
+    category_slug: "audio",
+    label: "Amazon Best Sellers: Headphones",
   },
   {
-    url: "https://thegadgetflow.com/blog/",
+    url: "https://www.amazon.com/Best-Sellers-Electronics-Smartwatches/zgbs/electronics/7939901011",
+    source_site: "amazon",
+    category_slug: "wearable",
+    label: "Amazon Best Sellers: Smartwatches",
+  },
+  {
+    url: "https://www.amazon.com/Best-Sellers-Smart-Home/zgbs/smart-home/",
+    source_site: "amazon",
+    category_slug: "smart_home",
+    label: "Amazon Best Sellers: Smart Home",
+  },
+  {
+    url: "https://www.amazon.com/Best-Sellers-Electronics-Portable-Bluetooth-Speakers/zgbs/electronics/7073956011",
+    source_site: "amazon",
+    category_slug: "audio",
+    label: "Amazon Best Sellers: Bluetooth Speakers",
+  },
+  {
+    url: "https://www.amazon.com/Best-Sellers-Electronics-Drones/zgbs/electronics/14329736011",
+    source_site: "amazon",
+    category_slug: "photography",
+    label: "Amazon Best Sellers: Drones",
+  },
+  {
+    url: "https://www.amazon.com/Best-Sellers-Electronics-Computer-Keyboards/zgbs/electronics/12879431",
+    source_site: "amazon",
+    category_slug: "productivity",
+    label: "Amazon Best Sellers: Keyboards",
+  },
+  {
+    url: "https://www.amazon.com/Best-Sellers-Electronics-Gaming-Headsets/zgbs/electronics/402053011",
+    source_site: "amazon",
+    category_slug: "gaming",
+    label: "Amazon Best Sellers: Gaming Headsets",
+  },
+  {
+    url: "https://www.amazon.com/Best-Sellers-Electronics-Action-Cameras/zgbs/electronics/7161092011",
+    source_site: "amazon",
+    category_slug: "photography",
+    label: "Amazon Best Sellers: Action Cameras",
+  },
+  // Editorial / curated tech sites
+  {
+    url: "https://www.wired.com/gallery/best-gadgets/",
+    source_site: "wired",
+    category_slug: "other",
+    label: "Wired: Best Gadgets",
+  },
+  {
+    url: "https://thegadgetflow.com/cool-tech-gadgets/",
     source_site: "gadgetflow",
     category_slug: "other",
-    label: "GadgetFlow Blog",
-  },
-  {
-    url: "https://blessthisstuff.com",
-    source_site: "blessthisstuff",
-    category_slug: "other",
-    label: "BlessThisStuff",
-  },
-  {
-    url: "https://dudeiwantthat.com",
-    source_site: "dudeiwantthat",
-    category_slug: "other",
-    label: "DudeIWantThat",
-  },
-  {
-    url: "https://coolthings.com",
-    source_site: "coolthings",
-    category_slug: "other",
-    label: "CoolThings",
-  },
-  {
-    url: "https://gearpatrol.com/tech/",
-    source_site: "gearpatrol",
-    category_slug: "productivity",
-    label: "Gear Patrol Tech",
-  },
-  {
-    url: "https://yankodesign.com",
-    source_site: "yankodesign",
-    category_slug: "other",
-    label: "Yanko Design",
-  },
-  {
-    url: "https://awesomestufftobuy.com/gifts/gadgets/",
-    source_site: "awesomestuff",
-    category_slug: "other",
-    label: "AwesomeStuffToBuy",
-  },
-  {
-    url: "https://rakunew.com",
-    source_site: "rakunew",
-    category_slug: "other",
-    label: "Rakunew",
+    label: "GadgetFlow: Cool Tech",
   },
   {
     url: "https://www.producthunt.com/topics/hardware",
     source_site: "producthunt",
     category_slug: "productivity",
-    label: "Product Hunt Hardware",
+    label: "Product Hunt: Hardware",
   },
 ];
+
+// ---------------------------------------------------------------------------
+// Non-electronics blocklist — reject items matching these terms
+// ---------------------------------------------------------------------------
+
+const NON_ELECTRONICS_BLOCKLIST = [
+  // Outdoor / camping
+  "tent", "sleeping bag", "backpack", "hiking boot", "camp stove", "cooler",
+  "hammock", "canteen", "trekking pole", "camp chair", "camping",
+  // Kitchen / cooking (non-electronic)
+  "knife set", "cutting board", "pan", "skillet", "spatula", "apron",
+  "cookbook", "spice rack", "mug", "tumbler", "bottle opener", "wine",
+  "cocktail", "grilling", "cast iron",
+  // Fashion / clothing
+  "shirt", "jacket", "hoodie", "sneaker", "boot", "hat", "cap",
+  "belt", "sock", "sunglasses", "cologne", "perfume", "watch band",
+  "leather strap", "clothing", "apparel", "jeans", "shorts",
+  // Furniture / decor
+  "desk mat", "poster", "candle", "planter", "shelf", "bookend",
+  "rug", "blanket", "pillow", "couch", "sofa", "chair", "table",
+  // Hand tools (non-electronic)
+  "wrench", "screwdriver set", "pliers", "hammer", "saw", "axe",
+  "shovel", "rake",
+  // Other non-electronics
+  "wallet", "keychain", "pen", "notebook", "sticker", "card game",
+  "board game", "puzzle", "toy", "figurine", "art print",
+];
+
+function isElectronicGadget(title: string, description?: string | null): boolean {
+  const text = `${title} ${description ?? ""}`.toLowerCase();
+  for (const blocked of NON_ELECTRONICS_BLOCKLIST) {
+    if (text.includes(blocked)) return false;
+  }
+  return true;
+}
 
 // ---------------------------------------------------------------------------
 // Product interface
@@ -316,6 +359,12 @@ function resolveUrl(href: string, base: string): string {
   }
 }
 
+/** Upgrade Amazon thumbnail URLs to higher resolution */
+function upgradeAmazonImageUrl(url: string): string {
+  // Replace small dimension markers like ._AC_UL100_ with ._AC_UL600_
+  return url.replace(/\._AC_[A-Z]{2}\d+_\./g, "._AC_UL600_.");
+}
+
 async function validateImageUrl(url: string): Promise<boolean> {
   try {
     const controller = new AbortController();
@@ -334,12 +383,17 @@ async function validateImageUrl(url: string): Promise<boolean> {
   }
 }
 
+/** Delay helper for rate limiting */
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 // ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 
 async function main() {
-  console.log("Starting Firecrawl seed script (markdown mode)...\n");
+  console.log("Starting Firecrawl seed script (electronics-focused)...\n");
 
   // Fetch category map
   const { data: categories } = await supabase
@@ -360,8 +414,16 @@ async function main() {
   let totalScraped = 0;
   let totalInserted = 0;
   let totalSkipped = 0;
+  let totalFiltered = 0;
 
-  for (const source of SOURCES) {
+  for (let sourceIndex = 0; sourceIndex < SOURCES.length; sourceIndex++) {
+    const source = SOURCES[sourceIndex];
+
+    // Rate limit: wait 2s between Firecrawl calls
+    if (sourceIndex > 0) {
+      await delay(2000);
+    }
+
     console.log(`\n--- Scraping: ${source.label} (${source.url}) ---`);
 
     try {
@@ -390,6 +452,13 @@ async function main() {
           continue;
         }
 
+        // Electronics blocklist filter
+        if (!isElectronicGadget(product.title, product.description)) {
+          console.log(`  Filtered non-electronic: "${product.title}"`);
+          totalFiltered++;
+          continue;
+        }
+
         // Resolve and validate product URL
         const rawUrl = product.product_url ?? source.url;
         const productUrl = resolveUrl(rawUrl, source.url);
@@ -405,12 +474,23 @@ async function main() {
         }
 
         // Resolve and validate image
-        const imageUrl = product.image_url
+        let imageUrl = product.image_url
           ? resolveUrl(product.image_url, source.url)
           : null;
         if (!imageUrl || !isValidHttpUrl(imageUrl)) {
           totalSkipped++;
           continue;
+        }
+
+        // Reject known low-res URL patterns
+        if (/thumbnail|icon|favicon|sprite/i.test(imageUrl)) {
+          totalSkipped++;
+          continue;
+        }
+
+        // Upgrade Amazon image resolution
+        if (imageUrl.includes("amazon") || imageUrl.includes("media-amazon")) {
+          imageUrl = upgradeAmazonImageUrl(imageUrl);
         }
 
         const imageValid = await validateImageUrl(imageUrl);
@@ -435,7 +515,7 @@ async function main() {
             null,
           tags: [],
           is_active: true,
-          content_status: "approved",
+          content_status: "pending",
         });
       }
 
@@ -449,21 +529,24 @@ async function main() {
           console.error(`  Insert error:`, error.message);
         } else {
           totalInserted += batch.length;
-          console.log(`  Inserted ${batch.length} gadgets`);
+          console.log(`  Inserted ${batch.length} gadgets (pending review)`);
         }
       }
     } catch (error) {
       const msg = error instanceof Error ? error.message : String(error);
       console.error(`  Error scraping ${source.label}: ${msg}`);
+      console.log(`  Skipping source and continuing...`);
     }
   }
 
   console.log("\n========================================");
   console.log(`Seed complete!`);
-  console.log(`  Total scraped:  ${totalScraped}`);
-  console.log(`  Total inserted: ${totalInserted}`);
-  console.log(`  Total skipped:  ${totalSkipped}`);
-  console.log("========================================\n");
+  console.log(`  Total scraped:            ${totalScraped}`);
+  console.log(`  Non-electronics filtered: ${totalFiltered}`);
+  console.log(`  Total inserted (pending): ${totalInserted}`);
+  console.log(`  Total skipped:            ${totalSkipped}`);
+  console.log("========================================");
+  console.log("Items are in PENDING status. Use the admin panel to approve them.\n");
 }
 
 main().catch((err) => {

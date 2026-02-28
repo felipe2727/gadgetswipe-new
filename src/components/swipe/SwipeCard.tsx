@@ -28,6 +28,7 @@ const SOURCE_DISPLAY: Record<string, string> = {
   gearpatrol: "Gear Patrol",
   yankodesign: "Yanko Design",
   rakunew: "Rakunew",
+  wired: "Wired",
 };
 
 interface SwipeCardProps {

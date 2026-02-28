@@ -86,7 +86,7 @@ Deno.serve(async (req) => {
       category_id: categoryMap.get(g.category_slug ?? "other") ?? categoryMap.get("other") ?? null,
       tags: g.tags ?? [],
       is_active: true,
-      content_status: "approved",
+      content_status: "pending",
     }));
 
     // Insert in batches of 50

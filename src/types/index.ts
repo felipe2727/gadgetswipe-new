@@ -12,7 +12,8 @@ export type SourceSite =
   | "coolthings"
   | "gearpatrol"
   | "yankodesign"
-  | "rakunew";
+  | "rakunew"
+  | "wired";
 
 export interface Gadget {
   id: string;

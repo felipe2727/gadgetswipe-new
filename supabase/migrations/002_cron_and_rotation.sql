@@ -40,11 +40,11 @@ $$ LANGUAGE plpgsql;
 -- CRON SCHEDULES
 -- ============================================
 
--- Scrape every 12 hours
+-- Scrape weekly on Mondays at 6 AM UTC
 -- NOTE: Replace <project-ref> with your actual Supabase project reference
 -- SELECT cron.schedule(
 --   'scrape-gadgets-job',
---   '0 */12 * * *',
+--   '0 6 * * 1',
 --   $$SELECT net.http_post(
 --     url := 'https://<project-ref>.supabase.co/functions/v1/scrape-gadgets',
 --     headers := jsonb_build_object(
