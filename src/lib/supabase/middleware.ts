@@ -39,7 +39,7 @@ export async function updateSession(request: NextRequest) {
     const adminUserId = process.env.ADMIN_USER_ID;
     if (!user || user.id !== adminUserId) {
       const url = request.nextUrl.clone();
-      url.pathname = "/";
+      url.pathname = "/login";
       return NextResponse.redirect(url);
     }
   }

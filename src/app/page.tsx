@@ -61,7 +61,11 @@ export default function Home() {
         </Link>
 
         <p className="text-xs text-text-secondary">
-          No sign-up required. Just swipe.
+          No sign-up required. Just swipe.{" "}
+          <a href="/login" className="text-accent hover:underline">
+            Or sign in
+          </a>{" "}
+          to save your history.
         </p>
       </main>
     </div>
