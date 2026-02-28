@@ -7,7 +7,6 @@ import { SwipeStack } from "@/components/swipe/SwipeStack";
 import { SwipeActions } from "@/components/swipe/SwipeActions";
 import { SwipeHeader } from "@/components/swipe/SwipeHeader";
 import { ProgressBar } from "@/components/ProgressBar";
-import { BottomNav } from "@/components/BottomNav";
 import type { Gadget, SwipeDirection } from "@/types";
 
 interface SwipeClientProps {
@@ -146,7 +145,6 @@ export function SwipeClient({ initialGadgets }: SwipeClientProps) {
         disabled={gadgets.slice(currentIndex, currentIndex + 1).length === 0}
       />
 
-      <BottomNav />
     </div>
   );
 }

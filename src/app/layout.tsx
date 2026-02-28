@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import { Providers } from "./providers";
+import { Navbar } from "@/components/Navbar";
+import { BottomNav } from "@/components/BottomNav";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -34,7 +36,11 @@ export default function RootLayout({
       <body
         className={`${spaceGrotesk.variable} antialiased bg-bg-primary text-text-primary`}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <Navbar />
+          <main className="pt-14 pb-24 min-h-screen">{children}</main>
+          <BottomNav />
+        </Providers>
       </body>
     </html>
   );

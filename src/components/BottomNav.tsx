@@ -14,8 +14,7 @@ type NavItem = {
 const NAV_ITEMS: NavItem[] = [
   { label: "Discover", icon: "style", href: "/swipe" },
   { label: "Matches", icon: "favorite", href: null }, // resolved dynamically
-  { label: "Deals", icon: "local_offer", href: null },
-  { label: "Profile", icon: "account_circle", href: null },
+  { label: "Profile", icon: "account_circle", href: "/login" },
 ];
 
 export function BottomNav() {

@@ -14,7 +14,7 @@ export default async function AdminLayout({
   const adminUserId = process.env.ADMIN_USER_ID;
 
   if (!user || user.id !== adminUserId) {
-    redirect("/");
+    redirect("/login");
   }
 
   return <>{children}</>;
