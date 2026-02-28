@@ -56,6 +56,12 @@ export function Navbar() {
           </Link>
         ) : (
           <>
+            <Link
+              href="/admin/gadgets"
+              className="text-xs font-medium text-accent hover:text-accent/80 transition-colors"
+            >
+              Admin
+            </Link>
             <span className="text-xs text-text-secondary truncate max-w-[120px]">
               {user?.email}
             </span>
