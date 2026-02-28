@@ -1,8 +1,8 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 function LoginForm() {
@@ -12,9 +12,22 @@ function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
-  const router = useRouter();
+  const [checking, setChecking] = useState(true);
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/";
+
+  // If user is already logged in (non-anonymous), redirect immediately
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user && !user.is_anonymous) {
+        // Already logged in — force full reload so server sees the cookies
+        window.location.href = redirectTo;
+      } else {
+        setChecking(false);
+      }
+    });
+  }, [redirectTo]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,13 +58,22 @@ function LoginForm() {
       if (error) {
         setError(error.message);
       } else {
-        router.push(redirectTo);
-        router.refresh();
+        // Full page navigation so server middleware gets fresh cookies
+        window.location.href = redirectTo;
+        return;
       }
     }
 
     setLoading(false);
   };
+
+  if (checking) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-6">
